@@ -194,6 +194,30 @@ h2 {
   color: white;
 }
 
+.topbar-nav {
+  display: flex;
+  gap: 18px;
+  margin-top: 6px;
+}
+
+.nav-link {
+  color: #c3c9d6;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-link:hover {
+  color: white;
+}
+
+.nav-link--active {
+  color: white;
+  border-bottom-color: var(--teal);
+}
+
 .topbar-user {
   display: flex;
   align-items: center;
@@ -341,6 +365,29 @@ thead th {
   padding: 10px 12px;
 }
 
+.sort-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sort-header:hover {
+  color: var(--ink);
+}
+
+.sort-arrow {
+  font-size: 0.6rem;
+  color: var(--teal-dark);
+}
+
 tbody td {
   padding: 12px;
   border-bottom: 1px solid var(--line);
@@ -407,6 +454,70 @@ tbody td {
 .modal-actions-right {
   display: flex;
   gap: 10px;
+}
+
+/* ---------- Page heading (batch / usage pages) ---------- */
+.page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-heading h1 {
+  font-size: 1.6rem;
+}
+
+/* ---------- Batch register rows ---------- */
+.batch-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.batch-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.batch-row--header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.batch-row input {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.batch-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+}
+
+.form-grid--usage {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 900px) {
+  .form-grid--usage {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .batch-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {

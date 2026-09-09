@@ -96,6 +96,24 @@ para o GitHub.
    Authorized domains**, adicione o domínio que o Vercel te deu (ex.:
    `seu-projeto.vercel.app`), senão o login pode ser bloqueado em produção.
 
+## Novidades desta versão
+
+- **Tipo, Modelo, Funcionando, Sala**: agora são campos de texto com
+  autocomplete (`datalist`) — sugerem valores já usados, mas aceitam texto
+  novo. O campo **Sala** é obrigatório no cadastro e pode ser alterado a
+  qualquer momento na edição do aparelho.
+- **Ordenação da tabela**: clique no cabeçalho de Tipo, Modelo, Numeração ou
+  Sala para ordenar crescente/decrescente.
+- **Cadastro em lote** (`/lote`): defina Tipo, Modelo e Sala uma vez e
+  adicione várias linhas só com Numeração e, se houver, o Problema.
+- **Uso temporário** (`/uso`): registra empréstimos de aparelhos (dia, hora,
+  professor, disciplina, quantidade, tipo/modelo, observação). Cada registro
+  tem um botão **Devolver**; depois de devolvido, aparece a opção **Remover
+  histórico** para limpar a lista.
+- Nova coleção no Firestore: **`usageLogs`** (além de `devices`). A regra
+  de segurança do `firestore.rules` já cobre as duas — não precisa mudar
+  nada no console, só publicar o arquivo se ainda não publicou.
+
 ## Estrutura do projeto
 
 ```

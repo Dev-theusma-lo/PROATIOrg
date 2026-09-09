@@ -25,6 +25,7 @@ export default function ExportButton({ devices }) {
         { header: 'Tipo', key: 'tipo', width: 14 },
         { header: 'Modelo', key: 'modelo', width: 32 },
         { header: 'Numeração', key: 'numeracao', width: 18 },
+        { header: 'Sala', key: 'sala', width: 20 },
         { header: 'Situação', key: 'situacao', width: 34 },
       ]
 
@@ -43,6 +44,7 @@ export default function ExportButton({ devices }) {
           tipo: device.tipo,
           modelo: device.modelo,
           numeracao: device.numeracao,
+          sala: device.sala,
           situacao: broken ? device.funcionando : 'Funcionando',
         })
         const fill = broken ? BROKEN_FILL : OK_FILL
@@ -54,7 +56,7 @@ export default function ExportButton({ devices }) {
         row.getCell('numeracao').font = { name: 'Consolas', size: 11 }
       })
 
-      sheet.autoFilter = { from: 'A1', to: 'D1' }
+      sheet.autoFilter = { from: 'A1', to: 'E1' }
 
       // Aba de resumo
       const summary = workbook.addWorksheet('Resumo')

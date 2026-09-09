@@ -1,15 +1,23 @@
 import { useState } from 'react'
 import { deleteDevice, updateDevice } from '../utils/deviceService'
+import { useDistinctValues } from '../utils/useDistinctValues'
+import DatalistField from './DatalistField'
 
-export default function DeviceEditModal({ device, onClose }) {
+export default function DeviceEditModal({ device, devices, onClose }) {
   const [form, setForm] = useState({
     tipo: device.tipo,
     modelo: device.modelo,
     numeracao: device.numeracao,
+    sala: device.sala || '',
     funcionando: device.funcionando || '',
   })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+
+  const tipos = useDistinctValues(devices, 'tipo', ['Notebook', 'Tablet'])
+  const modelos = useDistinctValues(devices, 'modelo')
+  const salas = useDistinctValues(devices, 'sala')
+  const problemas = useDistinctValues(devices, 'funcionando')
 
   function handleChange(field) {
     return (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))
@@ -17,6 +25,10 @@ export default function DeviceEditModal({ device, onClose }) {
 
   async function handleSave(e) {
     e.preventDefault()
+    if (!form.tipo.trim() || !form.modelo.trim() || !form.numeracao.trim() || !form.sala.trim()) {
+      setError('Preencha tipo, modelo, numeração e sala.')
+      return
+    }
     setSaving(true)
     setError('')
     try {
@@ -51,18 +63,21 @@ export default function DeviceEditModal({ device, onClose }) {
         <h2>Editar aparelho</h2>
 
         <div className="form-grid">
-          <label className="field">
-            <span>Tipo de aparelho</span>
-            <select value={form.tipo} onChange={handleChange('tipo')}>
-              <option value="Notebook">Notebook</option>
-              <option value="Tablet">Tablet</option>
-            </select>
-          </label>
+          <DatalistField
+            label="Tipo de aparelho"
+            value={form.tipo}
+            onChange={handleChange('tipo')}
+            options={tipos}
+            required
+          />
 
-          <label className="field">
-            <span>Modelo</span>
-            <input type="text" value={form.modelo} onChange={handleChange('modelo')} required />
-          </label>
+          <DatalistField
+            label="Modelo"
+            value={form.modelo}
+            onChange={handleChange('modelo')}
+            options={modelos}
+            required
+          />
 
           <label className="field">
             <span>Numeração</span>
@@ -74,15 +89,22 @@ export default function DeviceEditModal({ device, onClose }) {
             />
           </label>
 
-          <label className="field field--wide">
-            <span>Funcionando</span>
-            <input
-              type="text"
-              placeholder="Deixe em branco se estiver OK."
-              value={form.funcionando}
-              onChange={handleChange('funcionando')}
-            />
-          </label>
+          <DatalistField
+            label="Sala"
+            value={form.sala}
+            onChange={handleChange('sala')}
+            options={salas}
+            required
+          />
+
+          <DatalistField
+            label="Funcionando"
+            value={form.funcionando}
+            onChange={handleChange('funcionando')}
+            options={problemas}
+            placeholder="Deixe em branco se estiver OK."
+            wide
+          />
         </div>
 
         {error && <p className="form-error">{error}</p>}

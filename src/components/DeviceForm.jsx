@@ -1,12 +1,19 @@
 import { useState } from 'react'
 import { createDevice } from '../utils/deviceService'
+import { useDistinctValues } from '../utils/useDistinctValues'
+import DatalistField from './DatalistField'
 
-const EMPTY_FORM = { tipo: 'Notebook', modelo: '', numeracao: '', funcionando: '' }
+const EMPTY_FORM = { tipo: '', modelo: '', numeracao: '', sala: '', funcionando: '' }
 
-export default function DeviceForm() {
+export default function DeviceForm({ devices }) {
   const [form, setForm] = useState(EMPTY_FORM)
   const [saving, setSaving] = useState(false)
   const [feedback, setFeedback] = useState(null)
+
+  const tipos = useDistinctValues(devices, 'tipo', ['Notebook', 'Tablet'])
+  const modelos = useDistinctValues(devices, 'modelo')
+  const salas = useDistinctValues(devices, 'sala')
+  const problemas = useDistinctValues(devices, 'funcionando')
 
   function handleChange(field) {
     return (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }))
@@ -14,13 +21,15 @@ export default function DeviceForm() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!form.modelo.trim() || !form.numeracao.trim()) return
+    if (!form.tipo.trim() || !form.modelo.trim() || !form.numeracao.trim() || !form.sala.trim()) {
+      return
+    }
 
     setSaving(true)
     setFeedback(null)
     try {
       await createDevice(form)
-      setForm(EMPTY_FORM)
+      setForm((prev) => ({ ...EMPTY_FORM, tipo: prev.tipo, sala: prev.sala }))
       setFeedback({ type: 'success', text: 'Aparelho cadastrado.' })
     } catch (err) {
       setFeedback({ type: 'error', text: 'Não foi possível cadastrar. Tente novamente.' })
@@ -34,24 +43,23 @@ export default function DeviceForm() {
       <h2>Cadastrar aparelho</h2>
 
       <div className="form-grid">
-        <label className="field">
-          <span>Tipo de aparelho</span>
-          <select value={form.tipo} onChange={handleChange('tipo')}>
-            <option value="Notebook">Notebook</option>
-            <option value="Tablet">Tablet</option>
-          </select>
-        </label>
+        <DatalistField
+          label="Tipo de aparelho"
+          value={form.tipo}
+          onChange={handleChange('tipo')}
+          options={tipos}
+          placeholder="Notebook ou Tablet"
+          required
+        />
 
-        <label className="field">
-          <span>Modelo</span>
-          <input
-            type="text"
-            placeholder="Ex.: Dell Latitude 5420"
-            value={form.modelo}
-            onChange={handleChange('modelo')}
-            required
-          />
-        </label>
+        <DatalistField
+          label="Modelo"
+          value={form.modelo}
+          onChange={handleChange('modelo')}
+          options={modelos}
+          placeholder="Ex.: Dell Latitude 5420"
+          required
+        />
 
         <label className="field">
           <span>Numeração (patrimônio / série)</span>
@@ -64,16 +72,25 @@ export default function DeviceForm() {
           />
         </label>
 
-        <label className="field field--wide">
-          <span>Funcionando</span>
-          <input
-            type="text"
-            placeholder="Deixe em branco se estiver OK. Se tiver defeito, descreva aqui."
-            value={form.funcionando}
-            onChange={handleChange('funcionando')}
-          />
-          <small>Qualquer texto aqui marca o aparelho como estragado.</small>
-        </label>
+        <DatalistField
+          label="Sala"
+          value={form.sala}
+          onChange={handleChange('sala')}
+          options={salas}
+          placeholder="Ex.: Sala 12 / Laboratório"
+          required
+          hint="Pode ser alterada depois, a qualquer momento."
+        />
+
+        <DatalistField
+          label="Funcionando"
+          value={form.funcionando}
+          onChange={handleChange('funcionando')}
+          options={problemas}
+          placeholder="Deixe em branco se estiver OK"
+          hint="Qualquer texto aqui marca o aparelho como estragado."
+          wide
+        />
       </div>
 
       {feedback && (

@@ -3,6 +3,8 @@ import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './components/Login'
 import Home from './pages/Home'
+import BatchRegister from './pages/BatchRegister'
+import UsageControl from './pages/UsageControl'
 
 export default function App() {
   return (
@@ -15,6 +17,22 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lote"
+            element={
+              <ProtectedRoute>
+                <BatchRegister />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/uso"
+            element={
+              <ProtectedRoute>
+                <UsageControl />
               </ProtectedRoute>
             }
           />
