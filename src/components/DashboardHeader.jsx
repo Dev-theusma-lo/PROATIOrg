@@ -1,9 +1,9 @@
-import { isBroken } from '../utils/deviceService'
+import { isBroken, isTipo } from '../utils/deviceService'
 
 export default function DashboardHeader({ devices }) {
   const total = devices.length
-  const notebooks = devices.filter((d) => d.tipo === 'Notebook').length
-  const tablets = devices.filter((d) => d.tipo === 'Tablet').length
+  const notebooks = devices.filter((d) => isTipo(d, 'Notebook')).length
+  const tablets = devices.filter((d) => isTipo(d, 'Tablet')).length
   const comDefeito = devices.filter(isBroken).length
 
   return (

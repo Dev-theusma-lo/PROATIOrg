@@ -17,6 +17,12 @@ export function isBroken(device) {
   return Boolean(device.funcionando && device.funcionando.trim().length > 0)
 }
 
+export function isTipo(device, target) {
+  // Compara o tipo sem diferenciar maiúsculas/minúsculas nem espaços extras,
+  // já que o campo agora é texto livre (com datalist) e não um select fixo.
+  return (device.tipo || '').trim().toLowerCase() === target.trim().toLowerCase()
+}
+
 export async function createDevice({ tipo, modelo, numeracao, sala, funcionando }) {
   return addDoc(devicesRef, {
     tipo: tipo.trim(),

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
-import { isBroken } from '../utils/deviceService'
+import { isBroken, isTipo } from '../utils/deviceService'
 
 const HEADER_FILL = 'FF1F2A44'
 const OK_FILL = 'FFE3F5EA'
@@ -70,8 +70,8 @@ export default function ExportButton({ devices }) {
       })
       summary.addRows([
         { label: 'Total de aparelhos', value: devices.length },
-        { label: 'Notebooks', value: devices.filter((d) => d.tipo === 'Notebook').length },
-        { label: 'Tablets', value: devices.filter((d) => d.tipo === 'Tablet').length },
+        { label: 'Notebooks', value: devices.filter((d) => isTipo(d, 'Notebook')).length },
+        { label: 'Tablets', value: devices.filter((d) => isTipo(d, 'Tablet')).length },
         { label: 'Com defeito', value: devices.filter(isBroken).length },
       ])
 

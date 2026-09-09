@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import DeviceEditModal from './DeviceEditModal'
 import ExportButton from './ExportButton'
-import { isBroken } from '../utils/deviceService'
+import { isTipo, isBroken } from '../utils/deviceService'
 
 const COLUMNS = [
   { key: 'tipo', label: 'Tipo' },
@@ -17,8 +17,14 @@ export default function DeviceList({ devices, loading }) {
   const [sort, setSort] = useState({ key: 'modelo', direction: 'asc' })
 
   const tiposDisponiveis = useMemo(() => {
-    const set = new Set(devices.map((d) => d.tipo).filter(Boolean))
-    return Array.from(set).sort((a, b) => a.localeCompare(b, 'pt-BR'))
+    const seen = new Map()
+    devices.forEach((d) => {
+      const raw = (d.tipo || '').trim()
+      if (!raw) return
+      const key = raw.toLowerCase()
+      if (!seen.has(key)) seen.set(key, raw)
+    })
+    return Array.from(seen.values()).sort((a, b) => a.localeCompare(b, 'pt-BR'))
   }, [devices])
 
   function toggleSort(key) {
@@ -31,7 +37,7 @@ export default function DeviceList({ devices, loading }) {
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
     const result = devices.filter((d) => {
-      const matchesTipo = filterTipo === 'Todos' || d.tipo === filterTipo
+      const matchesTipo = filterTipo === 'Todos' || isTipo(d, filterTipo)
       const matchesSearch =
         !term ||
         d.modelo?.toLowerCase().includes(term) ||
